@@ -116,9 +116,9 @@
             // Assuming 'work' corresponds to the class
         }
 
-        // Example: Call fetchData with parameters from your login
-        var registerNumber = "12345";
-        var dob = "2023-11-24";
+        // Retrieve values from localStorage
+        var registerNumber = localStorage.getItem('registerNumber');
+        var dob = localStorage.getItem('dob');
         fetchData(registerNumber, dob);
     </script>
 </body>

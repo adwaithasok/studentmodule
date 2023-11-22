@@ -72,7 +72,10 @@
     <section id="about" class="about">
       <div class="container">
         <!-- Include your HTML page for work details here -->
-        <iframe src="/html pages/view_profile.html" width="100%" height="800px" frameborder="0"></iframe>
+        <!-- <iframe src="/html pages/view_profile.html" width="100%" height="800px" frameborder="0"></iframe> -->
+        <iframe src="/html pages/view_profile.html?register_number=<%= registerNumber %>&dob=<%= dob %>" width="100%"
+          height="800px" frameborder="0"></iframe>
+
       </div>
     </section>
 
@@ -87,7 +90,10 @@
         <section id="work-details" class="work-details">
           <div class="container">
             <!-- Include your HTML page for work details here -->
-            <iframe src="/html pages/view_work.html" width="100%" height="800px" frameborder="0"></iframe>
+            <!-- <iframe src="/html pages/view_work.html" width="100%" height="800px" frameborder="0"></iframe> -->
+            <iframe src="/html pages/view_work.html?register_number=<%= registerNumber %>&dob=<%= dob %>" width="100%"
+              height="800px" frameborder="0"></iframe>
+
           </div>
         </section>
 
@@ -131,26 +137,54 @@
   <script>
     // Function to make the AJAX request
     function fetchData() {
-      console.log('adwaith')
+      console.log('adwaith');
+
+      // Get the query string from the URL
+      var queryString = window.location.search;
+
+      // Remove the leading "?" character
+      queryString = queryString.substring(1);
+
+      // Split the query string into an array of key-value pairs
+      var queryParams = queryString.split("&");
+
+      // Create an object to store the key-value pairs
+      var params = {};
+      for (var i = 0; i < queryParams.length; i++) {
+        var pair = queryParams[i].split("=");
+        var key = decodeURIComponent(pair[0]);
+        var value = decodeURIComponent(pair[1]);
+        params[key] = value;
+      }
+
+      // Now you can access the values using the parameter names
+      var registerNumber = params.register_number;
+      var dob = params.dob;
+      console.log(registerNumber);
+      console.log(dob);
+
+      // Save values to localStorage
+      localStorage.setItem('registerNumber', registerNumber);
+      localStorage.setItem('dob', dob);
+
       // Replace the following URL with your actual API endpoint
-      var apiUrl = "http://127.0.0.1:5000/get_registration_data?register_number=12345&dob=2023-11-24";
+      var apiUrl = "http://127.0.0.1:5000/get_registration_data?register_number=" + registerNumber + "&dob=" + dob;
 
       // Make the AJAX request
       var xhr = new XMLHttpRequest();
       xhr.open("GET", apiUrl, true);
       xhr.onreadystatechange = function () {
-        var profileNameElement = document.getElementById("profileName")
-        var profileNameElement2 = document.getElementById("profileName2")
+        var profileNameElement = document.getElementById("profileName");
+        var profileNameElement2 = document.getElementById("profileName2");
         if (xhr.readyState == 4 && xhr.status == 200) {
           // Parse the JSON response
           var responseData = JSON.parse(xhr.responseText);
-          console.log({ responseData })
+          console.log({ responseData });
 
           // Update the profile name with the fetched data
           if (responseData && responseData.registration_data) {
-            console.log("responseData", { responseData })
+            console.log("responseData", { responseData });
 
-            // profileNameElement.innerHTML = '<a href="index.html">' + responseData.registration_data.name + '</a>';
             profileNameElement.textContent = responseData.registration_data.name;
             profileNameElement2.textContent = responseData.registration_data.name;
           }
@@ -158,12 +192,16 @@
         console.log('Response:', xhr.responseText);
         console.log('Parsed Response:', responseData);
         console.log('Name:', responseData.registration_data.name);
-
       };
-
 
       xhr.send();
     }
+
+    // Call the fetchData function when the page loads
+    document.addEventListener("DOMContentLoaded", function () {
+      fetchData();
+    });
+
 
     // Call the fetchData function when the page loads
     document.addEventListener("DOMContentLoaded", function () {

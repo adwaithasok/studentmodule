@@ -97,7 +97,9 @@
         </table>
     </main>
 
+
     <script>
+        // Function to fetch data from the API
         // Function to fetch data from the API
         function fetchData(registerNumber, dob) {
             var url = "http://127.0.0.1:5000/get_registration_data?register_number=" + registerNumber + "&dob=" + dob;
@@ -116,10 +118,13 @@
             document.getElementById('class').innerText = registrationData.department;  // Assuming 'work' corresponds to the class
         }
 
-        // Example: Call fetchData with parameters from your login
-        var registerNumber = "12345";
-        var dob = "2023-11-24";
+        // Retrieve values from localStorage
+        var registerNumber = localStorage.getItem('registerNumber');
+        var dob = localStorage.getItem('dob');
+
+        // Call fetchData with the retrieved values
         fetchData(registerNumber, dob);
+
     </script>
 </body>
 
